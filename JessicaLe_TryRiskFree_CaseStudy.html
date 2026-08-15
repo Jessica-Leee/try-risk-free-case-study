@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Try Risk-Free 案例分析 | TikTok Shop Beauty</title>
+<style>
+  :root {
+    --tt-red: #FE2C55;
+    --tt-cyan: #25F4EE;
+    --bg: #0f0f12;
+    --card: #1a1a20;
+    --card2: #22222a;
+    --text: #f2f2f5;
+    --muted: #9a9aa6;
+    --line: #33333d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: var(--bg); overflow: hidden; }
+  body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif; color: var(--text); }
+
+  #stage { position: fixed; left: 50%; top: 50%; width: 1280px; height: 720px; transform-origin: center center; }
+  .slide {
+    width: 1280px; height: 720px;
+    padding: 56px 80px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 0; left: 0;
+    background: var(--bg);
+  }
+  .slide.active { display: flex; animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .kicker { font-size: 15px; letter-spacing: 3px; text-transform: uppercase; color: var(--tt-cyan); margin-bottom: 14px; font-weight: 600; }
+  h1 { font-size: 52px; line-height: 1.25; font-weight: 700; }
+  h2 { font-size: 38px; line-height: 1.25; font-weight: 700; margin-bottom: 30px; }
+  .accent { color: var(--tt-red); }
+  .cyan { color: var(--tt-cyan); }
+  p, li { font-size: 20px; line-height: 1.65; color: var(--text); }
+  .muted { color: var(--muted); }
+  .small { font-size: 15px; }
+
+  .row { display: flex; gap: 24px; }
+  .col { flex: 1; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px 28px;
+  }
+  .card h3 { font-size: 21px; margin-bottom: 14px; font-weight: 600; }
+  .card p, .card li { font-size: 18px; line-height: 1.7; }
+  .card ul { padding-left: 20px; }
+  .card li { margin-bottom: 10px; }
+  .tag {
+    display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: 1px;
+    padding: 4px 14px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .tag.red { background: rgba(254,44,85,.15); color: var(--tt-red); border: 1px solid rgba(254,44,85,.4); }
+  .tag.cyan { background: rgba(37,244,238,.1); color: var(--tt-cyan); border: 1px solid rgba(37,244,238,.35); }
+  .tag.gray { background: rgba(154,154,166,.12); color: var(--muted); border: 1px solid var(--line); }
+
+  .loop { display: flex; align-items: stretch; justify-content: center; gap: 10px; margin: 28px 0 36px; }
+  .loop .node {
+    flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px;
+    background: var(--card2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 16px; font-size: 17.5px; text-align: center; line-height: 1.5;
+  }
+  .loop .arrow { color: var(--tt-red); font-size: 26px; font-weight: 700; align-self: center; }
+
+  #progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--tt-cyan), var(--tt-red)); width: 0%; transition: width .3s ease; z-index: 10; }
+  #counter { position: fixed; bottom: 16px; right: 20px; font-size: 13px; color: var(--muted); z-index: 10; }
+  #hint { position: fixed; bottom: 16px; left: 20px; font-size: 12px; color: #55555f; z-index: 10; }
+
+  .titleSlide { justify-content: center; }
+  .titleSlide .meta { margin-top: 60px; font-size: 15px; color: var(--muted); }
+  .brandbar { width: 72px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--tt-cyan), var(--tt-red)); margin-bottom: 30px; }
+
+  .divider { justify-content: center; }
+  .divider .qnum {
+    font-size: 120px; font-weight: 800; line-height: 1;
+    background: linear-gradient(90deg, var(--tt-cyan), var(--tt-red));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 24px;
+  }
+  .divider .qtext { font-size: 40px; font-weight: 700; line-height: 1.4; max-width: 980px; }
+  .divider .aline { font-size: 24px; color: var(--muted); margin-top: 28px; max-width: 920px; line-height: 1.6; }
+
+  .quote {
+    border-left: 4px solid var(--tt-red); padding: 18px 26px; background: var(--card);
+    border-radius: 0 12px 12px 0; margin-top: 24px;
+  }
+  .quote p { font-size: 21px; font-weight: 600; }
+
+  .mb8 { margin-bottom: 8px; } .mb14 { margin-bottom: 14px; } .mb20 { margin-bottom: 20px; } .mt16 { margin-top: 16px; } .mt20 { margin-top: 20px; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage">
+
+  <!-- 1: 封面 -->
+  <section class="slide titleSlide">
+    <div class="brandbar"></div>
+    <div class="kicker">TikTok Shop Beauty</div>
+    <h1>Try Risk-Free：<br>破局点、瓶颈与<span class="accent">下一步</span></h1>
+    <div class="meta">Jessica Le · 2026 年 8 月</div>
+  </section>
+
+  <!-- 2: 是什么 -->
+  <section class="slide">
+    <h2>Try Risk-Free 是什么</h2>
+    <p class="mb20" style="font-size:22px;">美妆商品不满意？<strong class="accent">留下商品，直接退款。</strong></p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">机制</div>
+        <ul>
+          <li>主观原因（颜色 / 气味 / 不喜欢）即可申请</li>
+          <li>30 天内、轻度使用也可以</li>
+          <li>第三方审核，商家不参与</li>
+          <li>商家按零售价 2% 付费</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag red">消费者的痛</div>
+        <ul>
+          <li>美妆要用过才知道合不合适</li>
+          <li>线上试不了 → 不敢下单</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag red">商家的痛</div>
+        <ul>
+          <li>收退货：开封商品卖不掉</li>
+          <li>拒退货：差评、掉分</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: Q1 分隔页 -->
+  <section class="slide divider">
+    <div class="qnum">Q1</div>
+    <div class="qtext">破局点在哪里？</div>
+  </section>
+
+  <!-- 4: 局在哪 -->
+  <section class="slide">
+    <h2>要谈破局，先看局在哪</h2>
+    <p class="mb14" style="font-size:20px;">商家在等「能多卖货」的证据，消费者却很少见到保障 —— 卡成一个循环：</p>
+    <div class="loop">
+      <div class="node"><strong>商家观望</strong><br><span class="muted small">没有证据，不愿付 2%</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><strong>供给稀薄</strong><br><span class="muted small">保障商品太少</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><strong>认知空白</strong><br><span class="muted small">消费者看不到、不敢买</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><strong>价值证伪</strong><br><span class="muted small">转化没变，2% 白花</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><strong>商家退出</strong><br><span class="muted small">循环更深</span></div>
+    </div>  </section>
+
+  <!-- 5: 破局点1 -->
+  <section class="slide">
+    <h2>破局点 1 · 从品类破 <span class="muted" style="font-size:22px;">—— 在哪打？</span></h2>
+    <p class="mb20" style="font-size:20px;">全美妆推广，初期主攻<strong class="accent">香水</strong>。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">为什么是香水</div>
+        <ul>
+          <li>气味线上传达不了，犹豫最强</li>
+          <li>增长最快的美妆子类目</li>
+          <li>客单价高，2% 付得起</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">第一步 · 请商家进来</div>
+        <ul>
+          <li>邀约头部 + 高退货商家</li>
+          <li>首期服务费<strong>直接免单</strong></li>
+          <li>加大流量扶持，换 A/B 测试</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">第二步 · 用数据放大</div>
+        <ul>
+          <li>跑出「保障商品转化率 <strong class="accent">+X%</strong>」</li>
+          <li>拿这个数字去说服全美妆商家</li>
+        </ul>
+      </div>
+    </div>  </section>
+
+  <!-- 6: 破局点2 -->
+  <section class="slide">
+    <h2>破局点 2 · 从商家破 <span class="muted" style="font-size:22px;">—— 靠谁打？</span></h2>
+    <p class="mb20" style="font-size:20px;">商家分三层，各自有不同打法。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">头部品牌</div>
+        <p>给最大的费率减免，请它们先试。大牌品控好、赔付少，跑出来的数据最有说服力 —— <strong>而且大牌在用，其他商家自然会跟。</strong></p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">平台新锐（如 Medicube）</div>
+        <p>和从 TikTok 起家的新品牌一起做案例。中小商家不太信大牌的故事，但会信<strong>「和我差不多的它，做成了」。</strong></p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">新入驻商家</div>
+        <p>开店工具包里默认带上保障。新店什么口碑都没有，<strong>挂个保障是最快让买家放心的办法。</strong></p>
+      </div>
+    </div>  </section>
+
+  <!-- 7: 破局点3 -->
+  <section class="slide">
+    <h2>破局点 3 · 从场景破 <span class="muted" style="font-size:22px;">—— 何时打？</span></h2>
+    <p class="mb20" style="font-size:20px;">挑保障价值被放到最大的两个时机。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">大促（黑五 / 超品日）· 拿证据</div>
+        <ul>
+          <li>商家冲销量，什么都愿意试</li>
+          <li>冲动购买多，「怕买错」最强</li>
+          <li>「放心买」专区 + 直播统一话术</li>
+          <li>产出：大促复盘报告 → 招商材料</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">新品首发 · 养习惯</div>
+        <ul>
+          <li>新品零口碑，消费者最犹豫</li>
+          <li>商家新品期最舍得花钱</li>
+          <li>「首月免费」，发新品默认开通</li>
+          <li>产出：「发新品 = 挂保障」的习惯</li>
+        </ul>
+      </div>
+    </div>  </section>
+
+  <!-- 8: 破局点4 -->
+  <section class="slide">
+    <h2>破局点 4 · 从声量破 <span class="muted" style="font-size:22px;">—— 怎么被看见？</span></h2>
+    <p class="mb20" style="font-size:20px;">让「不合适也不亏」出现在消费者旅程的每个触点。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">直播间</div>
+        <ul style="font-size:15.5px;">
+          <li>保障商品自动挂标，主播讲到时浮层弹出「不满意可退款 · 无需寄回」</li>
+          <li>给主播配标准话术卡，规范口播的场次给流量加权</li>
+          <li>头部美妆直播间首发合作，配专属运营和素材</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">短视频</div>
+        <ul style="font-size:15.5px;">
+          <li>达人拍赔付实测：下单 → 不满意 → 申请 → 到账，全程记录</li>
+          <li>发起「盲买挑战」：盲买香水，喜欢留下、不喜欢退款</li>
+          <li>好内容剪成合集，官方账号二次分发</li>
+        </ul>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">官方阵地</div>
+        <ul style="font-size:15.5px;">
+          <li>商城首页和美妆频道上主题 banner，统一视觉</li>
+          <li>搜索结果加「放心买」筛选标签，一键筛出保障商品</li>
+          <li>商详页固定位置写清规则：什么能退、多少天、不用寄回</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9: Q2 分隔页 -->
+  <section class="slide divider">
+    <div class="qnum">Q2</div>
+    <div class="qtext">最大的瓶颈点在哪里？</div>
+  </section>
+
+  <!-- 10: 四道坎 -->
+  <section class="slide">
+    <h2>破局之后的四道坎</h2>
+    <p class="mb20" style="font-size:19px;">前三道是风险来源，第四道是它们的财务总账 —— <strong class="accent">也是最大的瓶颈</strong>。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <h3 class="cyan">一 · 判得准吗</h3>
+        <p style="font-size:16px;">赔付要求商品只被「轻度使用」，但审核只能凭图片判断用了多少 —— 边界很难判准。</p>
+        <p class="muted" style="font-size:14px; margin-top:8px;">解法：统一判定标准 + 案例库 + AI 辅助识别使用程度，判定透明可申诉</p>
+      </div>
+      <div class="card col">
+        <h3 class="cyan">二 · 收得对吗</h3>
+        <p style="font-size:16px;">香水和洗护的赔付率差很多，统一收 2% 等于好商家替高风险商家买单 —— 时间一长，好商家流失。</p>
+        <p class="muted" style="font-size:14px; margin-top:8px;">解法：分品类、分商家的风险分层定价，用试点数据校准</p>
+      </div>
+      <div class="card col">
+        <h3 class="cyan">三 · 防得住吗</h3>
+        <p style="font-size:16px;">留货退款让「白拿」变容易；「赔付不计退货率」也可能被商家反向利用，洗掉退货指标。</p>
+        <p class="muted" style="font-size:14px; margin-top:8px;">解法：消费者端赔付上限 + 滥用画像；商家端准入把关 + 异动复查</p>
+      </div>
+      <div class="card col" style="border-color: rgba(254,44,85,.5);">
+        <h3 class="accent">四 · 算得平吗</h3>
+        <p style="font-size:16px;">2% 费率 = 2% 盈亏线，美妆退货率却有 5–15%。前三道任何一道失守，赔付都会被推高 —— <strong>账算不平，一切归零。</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11: 解法 -->
+  <section class="slide">
+    <h2>解法 · 让这笔账长期算得平</h2>
+    <p class="mb20" style="font-size:19px;">压赔付之外，还有两个方向：<strong>降本、增收</strong>。</p>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">降本 · 以券代现</div>
+        <p style="font-size:16px;">退 $30 现金，或 $33 购物金。购物金大概率变成下次消费，<strong>实际成本低于面值</strong> —— 赔付支出顺便变成复购入口。</p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">增收 · 动态费率</div>
+        <p style="font-size:16px;">大促冲动单多、赔付率会周期性升高 —— 平销期 2%，大促期上浮到 2.5–3%，<strong>费率跟着风险时段走</strong>，类似保险的旺季附加费。</p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">增收 · 浮存金</div>
+        <p style="font-size:16px;">收费和赔付之间有时间差，中间沉淀的资金可以产生收益 —— <strong>保险业的经典第二收入</strong>，规模越大越可观。</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 12: Q3 分隔页 -->
+  <section class="slide divider">
+    <div class="qnum">Q3</div>
+    <div class="qtext">下一步做什么？</div>
+  </section>
+
+  <!-- 13: Q3 拓展 -->
+  <section class="slide">
+    <h2>把 Try Risk-Free 拓展到更多业务</h2>
+    <div class="row mb14">
+      <div class="card col">
+        <div class="tag cyan">① 扩品类</div>
+        <p style="font-size:17px;">找和美妆同构的品类：<strong>主观体验、无法预判、退了卖不掉</strong> —— 假发、彩瞳、家居香氛、内衣。美妆的成功就是现成的说服力，冷启动几乎零成本。</p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">② 扩险种</div>
+        <p style="font-size:17px;">审核和定价的底座直接复用，长出<strong>运费保障、破损保障、正品保障</strong> —— 从单点功能变成保障矩阵。</p>
+      </div>
+      <div class="card col">
+        <div class="tag cyan">③ 扩市场</div>
+        <p style="font-size:17px;">沉淀一本「市场进入手册」，复制到美国以外的站点。<strong>机制不变，规则本地化。</strong></p>
+      </div>
+    </div>  </section>
+
+  <!-- 15: 结尾 -->
+  <section class="slide divider">
+    <div class="brandbar"></div>
+    <div class="qtext" style="font-size:56px;">谢谢</div>
+  </section>
+
+</div>
+
+<div id="counter"></div>
+<div id="hint">← → / 空格 翻页 · F 全屏</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === cur));
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+  }
+  function fit() {
+    const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96;
+    document.getElementById('stage').style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); show(cur + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  document.addEventListener('click', e => {
+    if (e.clientX > window.innerWidth * 0.7) show(cur + 1);
+    else if (e.clientX < window.innerWidth * 0.3) show(cur - 1);
+  });
+  window.addEventListener('resize', fit);
+  fit(); show(0);
+</script>
+</body>
+</html>
